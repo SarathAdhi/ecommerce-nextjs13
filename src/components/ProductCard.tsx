@@ -69,10 +69,10 @@ const ProductCard: React.FC<
               href={`/${productLink(pname, uuid)}`}
               className="hover:underline"
             >
-              <h5 className={cn("line-clamp-1")}>{pname}</h5>
+              <h5 className={cn("line-clamp-2 leading-tight")}>{pname}</h5>
             </Link>
           ) : (
-            <h5 className={cn("line-clamp-1")}>{pname}</h5>
+            <h5 className={cn("line-clamp-2 leading-tight")}>{pname}</h5>
           )}
 
           <div className="grid place-items-start">
