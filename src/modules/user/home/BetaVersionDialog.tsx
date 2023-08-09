@@ -13,12 +13,19 @@ const BetaVersionDialog = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    setIsOpen(true);
+    const isRead = localStorage.getItem("beta-update") === "true";
+    setIsOpen(isRead ? false : true);
   }, []);
 
   return (
     <div>
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <Dialog
+        open={isOpen}
+        onOpenChange={(e) => {
+          setIsOpen(e);
+          localStorage.setItem("beta-update", "true");
+        }}
+      >
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader className="space-y-4">
             <DialogTitle>Exciting Beta Launch Alert</DialogTitle>
