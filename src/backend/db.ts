@@ -22,5 +22,6 @@ export const userCollectionRef = collection(dbFireStore, "users");
 export const productCollectionRef = collection(dbFireStore, "products");
 export const sellerCollectionRef = collection(dbFireStore, "sellers");
 export const cartCollectionRef = collection(dbFireStore, "cart");
+export const reviewCollectionRef = collection(dbFireStore, "reviews");
 
 // export const auth = getAuth(app);

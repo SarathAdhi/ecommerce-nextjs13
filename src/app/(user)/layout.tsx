@@ -5,8 +5,9 @@ import { UserNavbar } from "@components/Navbar";
 import { getSellerProfile, getUserProfile } from "@utils/get-profile";
 import { Toaster } from "react-hot-toast";
 import ZustandWrapper from "@components/ZustandWrapper";
-import { getDoc } from "firebase/firestore";
-import { Cart } from "types/cart";
+import { DocumentData, DocumentReference, getDoc } from "firebase/firestore";
+import { Cart, MyCart } from "types/cart";
+import { filterDoc } from "@backend/lib";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,18 +25,22 @@ export default async function RootLayout({
   const seller = await getSellerProfile();
 
   let cartItemsLength = 0;
+  let userCart: MyCart<string>[] = [];
 
-  // if (user) {
-  //   const cartRef = await getDoc<Cart>(user?.cartId!);
-  //   const cartDetails = { ...cartRef.data() };
+  if (user) {
+    const { myCart } = (await filterDoc("cart", user?.cartId!)) as {
+      id: string;
+    } & Cart<DocumentReference<DocumentData>>;
 
-  //   cartItemsLength = cartDetails?.myCart?.length || 0;
-  // }
+    userCart = myCart.map((e) => ({ id: e.id.id, qty: e.qty }));
+
+    cartItemsLength = myCart.length;
+  }
 
   return (
     <html lang="en">
       <body className="min-h-screen flex flex-col">
-        <ZustandWrapper {...{ user, seller }}>
+        <ZustandWrapper {...{ user, seller, myCart: userCart }}>
           <UserNavbar
             {...{ isSeller: !!seller, isUser: !!user, cartItemsLength }}
           />

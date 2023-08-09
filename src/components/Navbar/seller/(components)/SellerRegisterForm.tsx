@@ -40,36 +40,47 @@ const SellerRegisterForm: React.FC<Props> = ({ onClose }) => {
       if (values.password !== values.confirm_password)
         return toast.error("Password doesn't match");
 
-      const seller = await filterDocs(
-        "sellers",
-        where("email", "==", values.email)
-      );
+      try {
+        const seller = await filterDocs(
+          "sellers",
+          where("email", "==", values.email)
+        );
 
-      if (seller.length !== 0) return toast.error("Email already exist");
+        if (seller.length !== 0) return toast.error("Email already exist");
 
-      const { confirm_password, ...rest } = values;
+        const { confirm_password, ...rest } = values;
 
-      const _uuid = uuid();
+        const _uuid = uuid();
 
-      await addDoc("sellers", {
-        ...rest,
-        uuid: _uuid,
-      });
+        await addDoc("sellers", {
+          ...rest,
+          uuid: _uuid,
+        });
 
-      setCookie("token-seller", _uuid);
+        setCookie("token-seller", _uuid);
 
-      toast.success("Account created successfully");
+        toast.success("Account created successfully");
 
-      await getSellerProfile("", _uuid);
+        await getSellerProfile("", _uuid);
 
-      onClose();
-      refresh();
+        onClose();
+        refresh();
+      } catch (error) {
+        console.log({ error });
+      }
     },
   });
 
   return (
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
-      <Input label="Name" name="name" placeholder="Enter your Name" />
+      <Input
+        label="Name"
+        name="name"
+        placeholder="Enter your Name"
+        value={formik.values.name}
+        onChange={formik.handleChange}
+        required
+      />
 
       <Input
         label="Email"
@@ -77,6 +88,7 @@ const SellerRegisterForm: React.FC<Props> = ({ onClose }) => {
         placeholder="Enter your Email"
         value={formik.values.email}
         onChange={formik.handleChange}
+        required
       />
 
       <Input
@@ -86,6 +98,7 @@ const SellerRegisterForm: React.FC<Props> = ({ onClose }) => {
         type="password"
         value={formik.values.password}
         onChange={formik.handleChange}
+        required
       />
 
       <Input
@@ -93,9 +106,14 @@ const SellerRegisterForm: React.FC<Props> = ({ onClose }) => {
         name="confirm_password"
         placeholder="Re-Enter your Password"
         type="password"
+        value={formik.values.confirm_password}
+        onChange={formik.handleChange}
+        required
       />
 
-      <Button>Login</Button>
+      <Button type="submit" isLoading={formik.isSubmitting}>
+        Register
+      </Button>
     </form>
   );
 };

@@ -12,7 +12,7 @@ import { Textarea } from "@components/ui/textarea";
 import InputFile from "@components/ui/InputFile";
 import Grid from "@components/Grid";
 import { doc } from "firebase/firestore";
-import { sellerCollectionRef } from "@backend/db";
+import { reviewCollectionRef, sellerCollectionRef } from "@backend/db";
 import { uuid } from "@utils/uuid";
 import { categories } from "@utils/constants";
 import { useAppStore } from "@utils/store";
@@ -58,8 +58,15 @@ const EditProductForm: React.FC<Props> = () => {
       const { images, ...rest } = values;
 
       try {
+        const { id } = await addDoc("reviews", {
+          reviews: [],
+        });
+
+        const reviewRef = doc(reviewCollectionRef, id);
+
         await addDoc("products", {
           ...rest,
+          reviewId: reviewRef,
           imagePath: `products/${values.uuid}/`,
           owner: doc(sellerCollectionRef, seller?.id),
         });
@@ -130,7 +137,6 @@ const EditProductForm: React.FC<Props> = () => {
           value={formik.values.discount}
           onChange={formik.handleChange}
           error={formik.errors.discount}
-          step={5}
           min={0}
           max={100}
         />
@@ -155,7 +161,7 @@ const EditProductForm: React.FC<Props> = () => {
         allowMultiple
       />
 
-      <Button>{initialValues ? "Update" : "Add"}</Button>
+      <Button>Add Product</Button>
     </form>
   );
 };

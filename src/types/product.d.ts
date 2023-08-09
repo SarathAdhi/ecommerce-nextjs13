@@ -11,6 +11,13 @@ interface Product<T = DocumentReference<DocumentData>> {
   imagePath: string;
   quantity: number;
   discount: number;
-  reviews: [];
   owner: T;
+  reviewId: DocumentReference<DocumentData>;
+  reviews: {
+    id: string;
+    user: DocumentReference<DocumentData>;
+    title: string;
+    description: string;
+    ratings: number;
+  }[];
 }

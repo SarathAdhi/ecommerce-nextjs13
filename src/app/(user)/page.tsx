@@ -1,6 +1,7 @@
 import { filterDocs } from "@backend/lib";
 import { Carousel } from "@components/Carousel";
 import ProductCard from "@components/ProductCard";
+import BetaVersionDialog from "@modules/user/home/BetaVersionDialog";
 import { categories } from "@utils/constants";
 import { fetchProductsImages } from "@utils/fetch-product";
 import { where } from "firebase/firestore";
@@ -47,47 +48,43 @@ const Home = async () => {
 
   return (
     <div>
-      <div className="grid gap-2">
-        <h3>Best of Electronics</h3>
+      {electronicsProducts.length !== 0 && (
+        <div className="grid gap-2">
+          <h3>Best of Electronics</h3>
 
-        <Carousel responsive={responsive}>
-          {electronicsProducts.map((product) => (
-            <ProductCard key={product.id} isDisplay {...product} />
-          ))}
+          <Carousel responsive={responsive}>
+            {electronicsProducts.map((product) => (
+              <ProductCard key={product.id} isDisplay {...product} />
+            ))}
+          </Carousel>
+        </div>
+      )}
 
-          {electronicsProducts.map((product) => (
-            <ProductCard key={product.id} isDisplay {...product} />
-          ))}
+      {fashionProducts.length !== 0 && (
+        <div className="grid gap-2">
+          <h3>Best of Fashion</h3>
 
-          {electronicsProducts.map((product) => (
-            <ProductCard key={product.id} isDisplay {...product} />
-          ))}
+          <Carousel responsive={responsive}>
+            {fashionProducts.map((product) => (
+              <ProductCard key={product.id} isDisplay {...product} />
+            ))}
+          </Carousel>
+        </div>
+      )}
 
-          {electronicsProducts.map((product) => (
-            <ProductCard key={product.id} isDisplay {...product} />
-          ))}
-        </Carousel>
-      </div>
+      {mobileProducts.length !== 0 && (
+        <div className="grid gap-2">
+          <h3>Best of Mobiles & Tablets</h3>
 
-      <div className="grid gap-2">
-        <h3>Best of Fashion</h3>
+          <Carousel responsive={responsive}>
+            {mobileProducts.map((product) => (
+              <ProductCard key={product.id} isDisplay {...product} />
+            ))}
+          </Carousel>
+        </div>
+      )}
 
-        <Carousel responsive={responsive}>
-          {fashionProducts.map((product) => (
-            <ProductCard key={product.id} isDisplay {...product} />
-          ))}
-        </Carousel>
-      </div>
-
-      <div className="grid gap-2">
-        <h3>Best of Mobiles & Tablets</h3>
-
-        <Carousel responsive={responsive}>
-          {mobileProducts.map((product) => (
-            <ProductCard key={product.id} isDisplay {...product} />
-          ))}
-        </Carousel>
-      </div>
+      <BetaVersionDialog />
     </div>
   );
 };

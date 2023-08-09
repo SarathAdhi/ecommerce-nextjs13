@@ -20,7 +20,7 @@ export const fetchProductImages = async (_product: Product) => {
 export const fetchProductDetails = async (_product: Product) => {
   let product = _product;
 
-  const images = await getFilesInFolder(product.imagePath);
+  const images = await getFilesInFolder(product?.imagePath);
 
   product.images = images.map((url) => ({
     url,

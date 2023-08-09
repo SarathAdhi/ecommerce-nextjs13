@@ -25,9 +25,9 @@ const UserNavbar = ({
         </div>
 
         <div className="flex gap-2">
-          <Button className="rounded-full">
+          {/* <Button className="rounded-full">
             <FaSearch />
-          </Button>
+          </Button> */}
 
           <UserNavbarActions {...{ isSeller, isUser, cartItemsLength }} />
         </div>

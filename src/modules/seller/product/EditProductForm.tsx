@@ -165,7 +165,7 @@ const EditProductForm: React.FC<Props> = ({ product }) => {
         allowMultiple
       />
 
-      <Button>Update</Button>
+      <Button>Update Product</Button>
     </form>
   );
 };

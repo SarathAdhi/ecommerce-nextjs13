@@ -29,7 +29,7 @@ export default async function RootLayout({
           seller ? "flex-row items-start" : "flex-col"
         )}
       >
-        <ZustandWrapper {...{ user, seller }}>
+        <ZustandWrapper myCart={null} {...{ user, seller }}>
           <SellerNavbar isSeller={!!seller} />
 
           <main

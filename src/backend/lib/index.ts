@@ -2,6 +2,7 @@ import {
   cartCollectionRef,
   dbFireStore,
   productCollectionRef,
+  reviewCollectionRef,
   sellerCollectionRef,
   storage,
   userCollectionRef,
@@ -26,16 +27,17 @@ import {
   uploadBytes,
 } from "firebase/storage";
 
-type DocProps = {
-  collection: "users" | "products" | "sellers" | "cart";
-  values: {};
-};
-
 const collections = {
   users: userCollectionRef,
   products: productCollectionRef,
   sellers: sellerCollectionRef,
   cart: cartCollectionRef,
+  reviews: reviewCollectionRef,
+};
+
+type DocProps = {
+  collection: keyof typeof collections;
+  values: {};
 };
 
 export const addDoc = async (
@@ -84,6 +86,8 @@ export const filterDoc = async (
   collection: FilterDocsProps["collection"] = "users",
   id: string
 ) => {
+  if (!id) return {};
+
   const getCollection = collections[collection];
 
   const docRef = doc(getCollection, id);

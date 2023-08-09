@@ -112,7 +112,9 @@ const UserRegisterForm: React.FC<Props> = ({ onClose }) => {
         error={formik.errors.confirm_password}
       />
 
-      <Button type="submit">Login</Button>
+      <Button type="submit" isLoading={formik.isSubmitting}>
+        Register
+      </Button>
     </form>
   );
 };

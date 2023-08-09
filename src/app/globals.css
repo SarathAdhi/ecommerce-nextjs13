@@ -90,6 +90,9 @@
   h5 {
     @apply text-lg md:text-xl font-semibold;
   }
+  button:disabled {
+    @apply !cursor-not-allowed;
+  }
 }
 
 .mr svg {
@@ -106,4 +109,8 @@
 
 .filepond--credits {
   @apply hidden -mt-10;
+}
+
+svg.star-svg {
+  display: inline;
 }

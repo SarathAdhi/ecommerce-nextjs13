@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import { FaUser, FaCartPlus } from "react-icons/fa";
+import { FaUser, FaCartPlus, FaProductHunt } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 import { Button } from "@components/ui/button";
 import SellerLoginModal from "./SellerLoginModal";
@@ -54,6 +54,13 @@ const SellerNavbarActions = ({ isSeller = false }) => {
                 <Link href="/seller/dashboard" className="space-x-2">
                   <MdDashboard size={20} />
                   <span>Dashboard</span>
+                </Link>
+              </Button>
+
+              <Button asChild className="!rounded-full">
+                <Link href="/seller/products" className="space-x-2">
+                  <FaProductHunt size={20} />
+                  <span>My Product</span>
                 </Link>
               </Button>
 

@@ -5,13 +5,15 @@ import { roundOff } from "@utils/round-off";
 import { Carousel } from "./Carousel";
 import { Button } from "./ui/button";
 import Image from "next/image";
+import { cn } from "@utils/cn";
+import { productLink } from "@utils/product-link";
 
 const CardWrapper: React.FC<
-  Component & { isDisplay: boolean; uuid: string }
-> = ({ isDisplay, uuid, children }) =>
+  Component & { isDisplay: boolean; uuid: string; pname: string }
+> = ({ isDisplay, pname, uuid, children }) =>
   isDisplay ? (
     <Link
-      href={`/${uuid}`}
+      href={`/${productLink(pname, uuid)}`}
       className="flex flex-col gap-4 p-4 bg-white rounded-md shadow-lg"
     >
       {children}
@@ -34,7 +36,7 @@ const ProductCard: React.FC<
   ActionButtons,
 }) => {
   return (
-    <CardWrapper isDisplay={isDisplay} uuid={uuid}>
+    <CardWrapper {...{ isDisplay, uuid, pname }}>
       <div>
         {isDisplay ? (
           <Image
@@ -62,25 +64,32 @@ const ProductCard: React.FC<
         )}
 
         <div className="mt-2 grid gap-2">
-          <h4>{pname}</h4>
+          {!isDisplay ? (
+            <Link
+              href={`/${productLink(pname, uuid)}`}
+              className="hover:underline"
+            >
+              <h5 className={cn("line-clamp-1")}>{pname}</h5>
+            </Link>
+          ) : (
+            <h5 className={cn("line-clamp-1")}>{pname}</h5>
+          )}
 
-          <div>
+          <div className="grid place-items-start">
             <p className="!text-base font-semibold text-green-700">
               Extra {roundOff(price * (discount / 100))} off
             </p>
 
-            <p>
-              <span className="text-2xl font-semibold">
-                {roundOff(price - price * (discount / 100))}
+            <p className="text-2xl font-semibold">
+              {roundOff(price - price * (discount / 100))}
+            </p>
+
+            <p className="!text-base">
+              <span className="text-gray-400 font-normal line-through mr-2">
+                ₹{price}
               </span>
 
-              <span className="ml-2 !text-base">
-                <span className="text-gray-400 font-normal line-through mr-2">
-                  ₹{price}
-                </span>
-
-                <span className="text-green-700">{discount}% off</span>
-              </span>
+              <span className="text-green-700">{discount}% off</span>
             </p>
           </div>
         </div>

@@ -7,16 +7,9 @@ import RemoveProductButton from "./RemoveProductButton";
 import { Button } from "@components/ui/button";
 import ProductCounter from "./ProductCounter";
 
-const CartProductCard: React.FC<Product<Seller> & { cartId: string }> = ({
-  id,
-  pname,
-  price,
-  uuid,
-  images,
-  discount,
-  cartId,
-  owner,
-}) => {
+const CartProductCard: React.FC<
+  Product<Seller> & { cartId: string; qty: number }
+> = ({ id, pname, price, uuid, images, discount, cartId, owner, qty }) => {
   return (
     <div className="flex flex-col gap-4 p-4 bg-white rounded-md shadow-lg">
       <div className="flex items-start gap-8">
@@ -62,10 +55,10 @@ const CartProductCard: React.FC<Product<Seller> & { cartId: string }> = ({
       </div>
 
       <div className="flex items-center justify-between gap-4">
-        <ProductCounter />
+        <ProductCounter {...{ qty, id }} />
 
         <div className="grid grid-cols-2 gap-4">
-          <RemoveProductButton cartId={cartId} id={id} />
+          <RemoveProductButton {...{ cartId, id, qty }} />
 
           <Button variant="secondary">Buy Now</Button>
         </div>

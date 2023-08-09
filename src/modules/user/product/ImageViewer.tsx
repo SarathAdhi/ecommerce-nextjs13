@@ -17,9 +17,10 @@ import { Product } from "types/product";
 type Props = {
   images: Product["images"];
   productId: string;
+  isAddedToCart: boolean;
 };
 
-const ImageViewer: React.FC<Props> = ({ images, productId }) => {
+const ImageViewer: React.FC<Props> = ({ images, productId, isAddedToCart }) => {
   const { refresh } = useRouter();
 
   const { user } = useAppStore();
@@ -33,17 +34,17 @@ const ImageViewer: React.FC<Props> = ({ images, productId }) => {
     const productRef = doc(productCollectionRef, productId);
 
     await updateDoc("cart", user?.cartId!, {
-      myCart: arrayUnion(productRef),
+      myCart: arrayUnion({ id: productRef, qty: 1 }),
     });
+
+    refresh();
 
     toast.success("Added to cart");
     setIsAddToCartLoading(false);
-
-    refresh();
   }
 
   return (
-    <div className="col-span-3 sticky top-[74px] self-start flex flex-col gap-4">
+    <div className="md:col-span-4 lg:col-span-3 md:sticky md:top-[74px] self-start flex flex-col gap-4">
       <div className="flex flex-col gap-4">
         <div className="flex overflow-x-auto">
           {images.map((img) => (
@@ -75,25 +76,28 @@ const ImageViewer: React.FC<Props> = ({ images, productId }) => {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-4">
           <Button
             variant="secondary"
             onClick={addToCart}
             className="uppercase mr"
+            disabled={isAddedToCart}
           >
             {isAddToCartLoading ? (
               <Loader2 className="animate-spin" />
             ) : (
               <>
-                <FaCartPlus size={16} />
+                {!isAddedToCart && (
+                  <FaCartPlus className="flex-shrink-0" size={16} />
+                )}
 
-                <span>Add to Cart</span>
+                <span>{isAddedToCart ? "Added" : "Add"} to Cart</span>
               </>
             )}
           </Button>
 
           <Button className="uppercase mr">
-            <AiTwotoneThunderbolt size={16} />
+            <AiTwotoneThunderbolt className="flex-shrink-0" size={16} />
 
             <span>Buy now</span>
           </Button>

@@ -8,6 +8,8 @@ import React from "react";
 import { Cart } from "types/cart";
 import { Product } from "types/product";
 
+type MyCartItem = Product<Seller> & { qty: number };
+
 const MyCart = async () => {
   const user = await getUserProfile("/?auth=login");
 
@@ -15,13 +17,13 @@ const MyCart = async () => {
     id: string;
   } & Cart<DocumentReference<DocumentData>>;
 
-  let cart: Product<Seller>[] = [];
+  let cart: MyCartItem[] = [];
   let totalPrice = 0;
   let totalDiscountPrice = 0;
 
   for (let i = 0; i < myCart.length; i++) {
     const item = myCart[i];
-    const x = await getDoc(item);
+    const x = await getDoc(item.id);
 
     const _product = { id: x.id, ...x.data() } as Product;
     const product = await fetchProductImages(_product);
@@ -33,10 +35,10 @@ const MyCart = async () => {
       ...ownerDetails.data(),
     };
 
-    cart.push({ ...product, owner } as Product<Seller>);
+    cart.push({ ...product, owner, qty: item.qty } as MyCartItem);
 
-    totalPrice += _product.price;
-    totalDiscountPrice += _product.price * (_product.discount / 100);
+    totalPrice += _product.price * item.qty;
+    totalDiscountPrice += _product.price * item.qty * (_product.discount / 100);
   }
 
   let totalPriceAfterDiscount = totalPrice - totalDiscountPrice;

@@ -25,9 +25,12 @@ const SelectTrigger = React.forwardRef<
     {...props}
   >
     {children}
-    <SelectPrimitive.Icon asChild>
-      <ChevronDown className="h-4 w-4 opacity-50" />
-    </SelectPrimitive.Icon>
+
+    {!props["aria-hidden"] && (
+      <SelectPrimitive.Icon asChild>
+        <ChevronDown className="h-4 w-4 opacity-50" />
+      </SelectPrimitive.Icon>
+    )}
   </SelectPrimitive.Trigger>
 ));
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
@@ -114,9 +117,11 @@ type Props = {
   placeholder: string;
   error?: string;
   items: {
-    value: string;
+    value: any;
     label: string;
   }[];
+  className?: string;
+  hideArrow?: boolean;
 } & SelectPrimitive.SelectProps;
 
 const Select: React.FC<Props> = ({
@@ -125,6 +130,8 @@ const Select: React.FC<Props> = ({
   name,
   label,
   error,
+  className = "",
+  hideArrow = false,
   ...rest
 }) => (
   <div className="w-full space-y-2">
@@ -135,7 +142,10 @@ const Select: React.FC<Props> = ({
     )}
 
     <_Select name={name} {...rest}>
-      <SelectTrigger className="w-full">
+      <SelectTrigger
+        aria-hidden={hideArrow}
+        className={cn("w-full", className)}
+      >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
 
