@@ -14,6 +14,7 @@ import { ResponsiveType } from "react-multi-carousel";
 import { Textarea } from "@components/ui/textarea";
 import InputFile from "@components/ui/InputFile";
 import Grid from "@components/Grid";
+import { useRouter } from "next/navigation";
 
 const responsive: ResponsiveType = {
   superLargeDesktop: {
@@ -44,12 +45,15 @@ const schema = y.object().shape({
 });
 
 type Props = {
-  product: Product<Seller>;
+  pid: string;
+  images: Product["images"];
+  product: typeof schema.__outputType;
 };
 
-const EditProductForm: React.FC<Props> = ({ product }) => {
-  const { id: pid, owner, imagePath, ...rest } = product;
-  let _initialValues = rest;
+const EditProductForm: React.FC<Props> = ({ pid, product, images }) => {
+  const { refresh } = useRouter();
+
+  let _initialValues = product;
 
   const formik = useFormik({
     initialValues: _initialValues,
@@ -131,7 +135,7 @@ const EditProductForm: React.FC<Props> = ({ product }) => {
 
       <div className="w-full grid">
         <Carousel responsive={responsive}>
-          {product.images.map((img, index) => (
+          {images.map((img, index) => (
             <div key={index} className="group relative">
               <img
                 src={img.url}
@@ -145,6 +149,7 @@ const EditProductForm: React.FC<Props> = ({ product }) => {
                   className="p-1 w-10 h-10 !rounded-full"
                   onClick={() => {
                     delFile(img.name);
+                    refresh();
                   }}
                 >
                   <FaTrashAlt />
@@ -160,7 +165,7 @@ const EditProductForm: React.FC<Props> = ({ product }) => {
         name="images"
         path={`products/${_initialValues.uuid}/`}
         setFieldValue={formik.setFieldValue}
-        value={formik.values["images"]}
+        value={images}
         // callback={getProduct}
         allowMultiple
       />
