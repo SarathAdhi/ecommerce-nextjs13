@@ -91,9 +91,12 @@ const ViewProduct: React.FC<Props> = async ({ params }) => {
             <legend className="px-2 text-2xl font-semibold">Offers</legend>
 
             <div className="-mt-2 grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
-              {offers.map((e) => {
+              {offers.map((e, i) => {
                 return (
-                  <div className="p-4 border-2 space-y-2 rounded-md flex flex-col items-end justify-between">
+                  <div
+                    key={e.name + i}
+                    className="p-4 border-2 space-y-2 rounded-md flex flex-col items-end justify-between"
+                  >
                     <div className="space-y-2">
                       <p className="font-semibold">
                         {e.type} - {e.name}
