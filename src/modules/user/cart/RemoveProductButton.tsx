@@ -30,7 +30,7 @@ const RemoveProductButton = ({ cartId = "", id = "", qty = 0 }) => {
   }
 
   return (
-    <Button onClick={removeMyProduct} variant="destructive">
+    <Button type="button" onClick={removeMyProduct} variant="destructive">
       {isLoading ? <Loader2 className="animate-spin" /> : "Remove"}
     </Button>
   );

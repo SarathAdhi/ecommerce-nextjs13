@@ -1,27 +1,34 @@
 "use client";
 
 import { productCollectionRef } from "@backend/db";
-import { updateDoc } from "@backend/lib";
-import { Input } from "@components/ui/input";
+import { filterDoc, updateDoc } from "@backend/lib";
 import { Select } from "@components/ui/select";
 import { useAppStore } from "@utils/store";
 import { DocumentData, DocumentReference, doc } from "firebase/firestore";
 import { MinusCircle, PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { MyCart } from "types/cart";
+import { Cart, MyCart } from "types/cart";
 
 const ProductCounter = ({ qty = 1, id = "" }) => {
   const { refresh } = useRouter();
-  const { user, myCart } = useAppStore();
+  const { user } = useAppStore();
 
   const [count, setCount] = useState(qty);
 
   let cartProducts: MyCart[] = [];
 
   async function updateProductQuantity(cnt: number) {
+    const { myCart: _myCart } = (await filterDoc("cart", user?.cartId!)) as {
+      id: string;
+    } & Cart<DocumentReference<DocumentData>>;
+
+    let myCart = _myCart.map((e) => ({ id: e.id.id, qty: e.qty }));
+
     for (let i = 0; i < myCart.length; i++) {
       const item = myCart[i];
+
+      console.log({ item });
 
       if (item.id === id) {
         const productRef = doc(productCollectionRef, id);
