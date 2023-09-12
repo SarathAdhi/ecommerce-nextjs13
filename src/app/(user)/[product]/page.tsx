@@ -28,7 +28,7 @@ const ViewProduct: React.FC<Props> = async ({ params, searchParams }) => {
   if (!productId)
     return (
       <div>
-        <h3>Product ID doesn't exist</h3>
+        <h3>Product ID does not exist</h3>
       </div>
     );
 

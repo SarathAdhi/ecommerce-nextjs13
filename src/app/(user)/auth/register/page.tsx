@@ -18,7 +18,7 @@ const UserRegisterPage = async () => {
             <h3 className="font-bold">Register</h3>
 
             <p className="text-lg leading-tight">
-              Looks like you're new here! Register to get started.
+              {"Looks like you're new here! Register to get started."}
             </p>
           </div>
 
