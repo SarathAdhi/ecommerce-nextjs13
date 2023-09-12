@@ -27,7 +27,7 @@ const initialValues = {
 };
 
 type Props = {
-  reviewId: string;
+  reviewId?: string;
 };
 
 const ProductReviewForm: React.FC<Props> = ({ reviewId }) => {
@@ -41,11 +41,11 @@ const ProductReviewForm: React.FC<Props> = ({ reviewId }) => {
     onSubmit: async (values) => {
       if (!user) {
         toast.error("Login to continue");
-        replace("/?auth=login");
+        replace("/auth/login");
       }
 
       try {
-        await updateDoc("reviews", reviewId, {
+        await updateDoc("reviews", reviewId!, {
           reviews: arrayUnion({ ...values, id: uuid() }),
         });
 

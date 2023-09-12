@@ -14,14 +14,14 @@ import { getSellerProfile } from "@utils/get-profile";
 import { useRouter } from "next/navigation";
 
 const registerSchema = y.object().shape({
-  name: y.string().required("Name is required"),
+  companyName: y.string().required("Company Name is required"),
   email: y.string().email("Invalid email").required("Email is required"),
   password: y.string().required("Password is required"),
   confirm_password: y.string().required("Password is required"),
 });
 
 const initialValuesRegister = {
-  name: "",
+  companyName: "",
   email: "",
   password: "",
   confirm_password: "",
@@ -75,9 +75,9 @@ const SellerRegisterForm: React.FC<Props> = ({ onClose }) => {
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
       <Input
         label="Name"
-        name="name"
+        name="companyName"
         placeholder="Enter your Name"
-        value={formik.values.name}
+        value={formik.values.companyName}
         onChange={formik.handleChange}
         required
       />

@@ -26,11 +26,7 @@ const initialValuesRegister = {
   confirm_password: "",
 };
 
-type Props = {
-  onClose: () => void;
-};
-
-const UserRegisterForm: React.FC<Props> = ({ onClose }) => {
+const UserRegisterForm = () => {
   const { refresh } = useRouter();
 
   const formik = useFormik({
@@ -61,13 +57,13 @@ const UserRegisterForm: React.FC<Props> = ({ onClose }) => {
         ..._values,
         uuid: _uuid,
         cartId: cartRefId,
+        balance: 1000,
       });
 
       setCookie("token-user", _uuid);
 
       toast.success("Account created successfully");
 
-      onClose();
       refresh();
     },
   });

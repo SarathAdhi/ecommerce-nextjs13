@@ -21,11 +21,7 @@ const initialValuesLogin = {
   password: "",
 };
 
-type Props = {
-  onClose: () => void;
-};
-
-const UserLoginForm: React.FC<Props> = ({ onClose }) => {
+const UserLoginForm = () => {
   const { refresh } = useRouter();
 
   const formik = useFormik({
@@ -45,7 +41,6 @@ const UserLoginForm: React.FC<Props> = ({ onClose }) => {
       setCookie("token-user", user[0].uuid);
       toast.success("Login successful");
 
-      onClose();
       refresh();
     },
   });

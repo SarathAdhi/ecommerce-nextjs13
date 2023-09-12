@@ -4,7 +4,6 @@ import Link from "next/link";
 import { roundOff } from "@utils/round-off";
 import Image from "next/image";
 import RemoveProductButton from "./RemoveProductButton";
-import { Button } from "@components/ui/button";
 import ProductCounter from "./ProductCounter";
 
 const CartProductCard: React.FC<
@@ -57,11 +56,7 @@ const CartProductCard: React.FC<
       <div className="flex items-center justify-between gap-4">
         <ProductCounter {...{ qty, id }} />
 
-        <div className="grid grid-cols-2 gap-4">
-          <RemoveProductButton {...{ cartId, id, qty }} />
-
-          <Button variant="secondary">Buy Now</Button>
-        </div>
+        <RemoveProductButton {...{ cartId, id, qty }} />
       </div>
     </div>
   );

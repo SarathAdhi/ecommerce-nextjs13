@@ -11,21 +11,49 @@ import Link from "next/link";
 import Image from "next/image";
 import { offers } from "../../../../offers";
 import ProductReviewForm from "@modules/user/product/ProductReviewForm";
-import StarRating from "@components/StarRating";
 import ReviewRenderer from "@modules/user/product/ReviewRenderer";
 
 type Props = {
   params: {
     product: string[];
   };
+  searchParams: {
+    pid: string;
+  };
 };
 
-const ViewProduct: React.FC<Props> = async ({ params }) => {
-  const productId = params.product[1];
+const ViewProduct: React.FC<Props> = async ({ params, searchParams }) => {
+  const productId = searchParams.pid;
+
+  if (!productId)
+    return (
+      <div>
+        <h3>Product ID doesn't exist</h3>
+      </div>
+    );
 
   const products = await filterDocs("products", where("uuid", "==", productId));
 
   let _product = products[0] as Product;
+
+  console.log({ _product });
+
+  if (!_product)
+    return (
+      <div className="p-4 flex-1 grid place-content-center">
+        <div>
+          <Image
+            className="w-[500px] max-w-full"
+            width={1000}
+            height={1000}
+            src="/assets/product/item-not-found.png"
+            alt="Item not found"
+          />
+
+          <h5 className="text-center uppercase">Item not found</h5>
+        </div>
+      </div>
+    );
 
   let product = await fetchProductDetails(_product);
 
@@ -48,7 +76,7 @@ const ViewProduct: React.FC<Props> = async ({ params }) => {
 
   let isAddedToCart = myCart?.some((e) => e.id.id === id);
 
-  const { reviews } = (await filterDoc("reviews", reviewId.id!)) as {
+  const { reviews } = (await filterDoc("reviews", reviewId?.id!)) as {
     reviews: Product["reviews"];
   };
 
@@ -199,7 +227,7 @@ const ViewProduct: React.FC<Props> = async ({ params }) => {
 
           <hr />
 
-          <ProductReviewForm reviewId={reviewId.id} />
+          <ProductReviewForm reviewId={reviewId?.id} />
         </div>
 
         <div className="w-full border p-4 rounded-md space-y-4">

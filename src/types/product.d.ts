@@ -12,7 +12,7 @@ interface Product<T = DocumentReference<DocumentData>> {
   quantity: number;
   discount: number;
   owner: T;
-  reviewId: DocumentReference<DocumentData>;
+  reviewId: DocumentReference<DocumentData> | null;
   reviews: {
     id: string;
     user: DocumentReference<DocumentData>;
@@ -20,4 +20,5 @@ interface Product<T = DocumentReference<DocumentData>> {
     description: string;
     ratings: number;
   }[];
+  category: string;
 }

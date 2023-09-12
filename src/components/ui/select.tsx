@@ -151,6 +151,10 @@ const Select: React.FC<Props> = ({
 
       <SelectContent id={name}>
         <SelectGroup>
+          <SelectItem disabled value="">
+            {placeholder}
+          </SelectItem>
+
           {items.map(({ value, label }) => (
             <SelectItem key={value} value={value}>
               {label}

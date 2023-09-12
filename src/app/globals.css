@@ -90,6 +90,9 @@
   h5 {
     @apply text-lg md:text-xl font-semibold;
   }
+  h6 {
+    @apply text-base md:text-lg font-semibold;
+  }
   button:disabled {
     @apply !cursor-not-allowed;
   }

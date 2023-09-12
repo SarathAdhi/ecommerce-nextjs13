@@ -22,10 +22,12 @@ export const fetchProductDetails = async (_product: Product) => {
 
   const images = await getFilesInFolder(product?.imagePath);
 
-  product.images = images.map((url) => ({
-    url,
-    name: ref(storage, url).fullPath,
-  }));
+  product.images = images
+    ? images.map((url) => ({
+        url,
+        name: ref(storage, url).fullPath,
+      }))
+    : [];
 
   const docSnap = await getDoc(
     product.owner as DocumentReference<DocumentData>
@@ -44,6 +46,8 @@ export const fetchProductDetails = async (_product: Product) => {
 
 export const fetchProductsImages = async (_products: Product[]) => {
   let products = _products;
+
+  if (products.length === 0) return products.map((e) => ({ ...e, images: [] }));
 
   for (let i = 0; i < products.length; i++) {
     let product = products[i];

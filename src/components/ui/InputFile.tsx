@@ -37,7 +37,6 @@ const InputFile: React.FC<Props> = ({
   fileType = IMAGE_TYPES,
   maxFileSize = 1000000,
   path = "",
-  beforeRemoveFile,
   initialImages,
   callback,
   setFieldValue,

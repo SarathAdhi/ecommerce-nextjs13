@@ -1,6 +1,7 @@
 import {
   cartCollectionRef,
   dbFireStore,
+  orderCollectionRef,
   productCollectionRef,
   reviewCollectionRef,
   sellerCollectionRef,
@@ -33,6 +34,7 @@ const collections = {
   sellers: sellerCollectionRef,
   cart: cartCollectionRef,
   reviews: reviewCollectionRef,
+  orders: orderCollectionRef,
 };
 
 type DocProps = {

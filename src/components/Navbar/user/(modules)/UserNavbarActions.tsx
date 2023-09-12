@@ -1,45 +1,15 @@
-"use client";
-
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
 import { SiShopify } from "react-icons/si";
 import { RiLoginBoxLine } from "react-icons/ri";
 import { Button } from "@components/ui/button";
-import UserLoginModal from "./UserLoginModal";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useAppStore } from "@utils/store";
 
 const UserNavbarActions = ({
   isSeller = false,
   isUser = false,
   cartItemsLength = 0,
 }) => {
-  const { replace } = useRouter();
-  const pathname = usePathname();
-  const auth = useSearchParams().get("auth");
-
-  const { user } = useAppStore();
-  const [isOpen, setIsOpen] = useState(false);
-
-  const onOpen = (auth = "login") => {
-    replace(`?auth=${auth}`);
-
-    setIsOpen(true);
-  };
-
-  const onClose = () => {
-    replace(pathname);
-    setIsOpen(false);
-  };
-
-  // This is needed to open the modal. If directly assigned to state, hyddration error is coming
-  useEffect(() => {
-    if ((!user && auth === "login") || (!user && auth === "register"))
-      onOpen(auth);
-    else onClose();
-  }, [auth, user]);
-
   return (
     <>
       <Button asChild className="rounded-full">
@@ -55,7 +25,7 @@ const UserNavbarActions = ({
       {!isUser && (
         <>
           <Button asChild variant="success" className="rounded-full">
-            <Link href="/?auth=login" className="mr" prefetch={true}>
+            <Link href="/auth/login" className="mr" prefetch={true}>
               <RiLoginBoxLine />
               Login
             </Link>
@@ -84,8 +54,6 @@ const UserNavbarActions = ({
           </Button>
         </>
       )}
-
-      <UserLoginModal {...{ isOpen, onClose }} />
     </>
   );
 };

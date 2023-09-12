@@ -9,3 +9,8 @@ export const categories = [
   label,
   value: label.toLowerCase().replaceAll(" ", "-"),
 }));
+
+export const sizes = ["S", "M", "L", "XL", "XXL"].map((label) => ({
+  label,
+  value: label.toLowerCase(),
+}));

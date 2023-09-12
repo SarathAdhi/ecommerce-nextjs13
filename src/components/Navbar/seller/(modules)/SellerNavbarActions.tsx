@@ -36,7 +36,6 @@ const SellerNavbarActions = ({ isSeller = false }) => {
   useEffect(() => {
     if ((!seller && auth === "login") || (!seller && auth === "register"))
       onOpen(auth);
-    else onClose();
   }, [auth, seller]);
 
   return (

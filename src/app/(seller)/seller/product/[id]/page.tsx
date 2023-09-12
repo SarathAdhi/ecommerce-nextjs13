@@ -3,9 +3,9 @@ import { fetchProductDetails } from "@utils/fetch-product";
 import { where } from "firebase/firestore";
 import React from "react";
 import { Product } from "types/product";
-import EditProductForm from "@modules/seller/product/EditProductForm";
 import { getSellerProfile } from "@utils/get-profile";
 import { redirect } from "next/navigation";
+import AddProductForm from "@modules/seller/product/AddProductForm";
 
 type Props = {
   params: {
@@ -23,7 +23,7 @@ const EditProduct: React.FC<Props> = async ({ params }) => {
   if (!_product)
     return <h2 className="text-center text-xl font-bold">Product Not Found</h2>;
 
-  let product = await fetchProductDetails(_product);
+  let product = (await fetchProductDetails(_product));
 
   if (product.owner.uuid !== seller?.uuid) redirect("/seller");
 
@@ -31,7 +31,7 @@ const EditProduct: React.FC<Props> = async ({ params }) => {
 
   return (
     <div>
-      <EditProductForm {...{ product: rest, pid: id, images }} />
+      <AddProductForm {...{ product, _category: rest.category }} />
     </div>
   );
 };
