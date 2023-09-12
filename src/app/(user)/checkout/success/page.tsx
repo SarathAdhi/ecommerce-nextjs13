@@ -1,11 +1,11 @@
 import { productCollectionRef, userCollectionRef } from "@backend/db";
-import { addDoc, filterDoc, filterDocs, updateDoc } from "@backend/lib";
+import { addDoc, filterDocs, updateDoc } from "@backend/lib";
+import InvalidSession from "@components/InvalidSession";
 import { getUserProfile } from "@utils/get-profile";
-import { doc, increment, where } from "firebase/firestore";
+import { doc, where } from "firebase/firestore";
 import Image from "next/image";
 import React from "react";
 import Stripe from "stripe";
-import { Cart } from "types/cart";
 
 const stripe = new Stripe(process.env.NEXT_STRIPE_SECRET_KEY!, {
   apiVersion: "2023-08-16",
@@ -21,9 +21,17 @@ type Props = {
 const CheckoutPage: React.FC<Props> = async ({ searchParams }) => {
   const user = await getUserProfile("/auth/login");
 
-  const session = await stripe.checkout.sessions.listLineItems(
-    searchParams.session_id
-  );
+  let session: Stripe.Response<Stripe.ApiList<Stripe.LineItem>> | null;
+
+  try {
+    session = await stripe.checkout.sessions.listLineItems(
+      searchParams.session_id
+    );
+  } catch (error) {
+    session = null;
+  }
+
+  if (!session) return <InvalidSession message="Invalid Session ID" />;
 
   const _items = session.data;
 
@@ -42,8 +50,6 @@ const CheckoutPage: React.FC<Props> = async ({ searchParams }) => {
 
     items.push({ ...product });
   }
-
-  console.log(items);
 
   const orders = await filterDocs(
     "orders",

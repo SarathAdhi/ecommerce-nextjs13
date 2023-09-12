@@ -76,7 +76,9 @@ export async function POST(req: NextRequest) {
       )}/checkout/success?session_id={CHECKOUT_SESSION_ID}&isCart=${
         isCartItems || "false"
       }`,
-      cancel_url: `${req.headers.get("origin")}/checkout/canceled`,
+      cancel_url: `${req.headers.get(
+        "origin"
+      )}/checkout/cancelled?session_id={CHECKOUT_SESSION_ID}`,
     };
 
     const session = await stripe.checkout.sessions.create(params);
