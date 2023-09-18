@@ -36,8 +36,6 @@ const ViewProduct: React.FC<Props> = async ({ params, searchParams }) => {
 
   let _product = products[0] as Product;
 
-  console.log({ _product });
-
   if (!_product)
     return (
       <div className="p-4 flex-1 grid place-content-center">

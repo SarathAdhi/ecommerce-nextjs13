@@ -4,15 +4,134 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@components/ui/card";
-import { Button } from "@components/ui/button";
 import { Overview } from "@modules/seller/dashboard/Overview";
+import { filterDocs } from "@backend/lib";
+import { doc, getDoc, where } from "firebase/firestore";
+import { sellerCollectionRef } from "@backend/db";
+import { Product as _Product } from "types/product";
+import { roundOff } from "@utils/round-off";
+import { Order } from "types/order";
+
+interface Product extends _Product {
+  user: User;
+}
+
+let monthSalesData = [
+  {
+    name: "Jan",
+    total: 0,
+  },
+  {
+    name: "Feb",
+    total: 0,
+  },
+  {
+    name: "Mar",
+    total: 0,
+  },
+  {
+    name: "Apr",
+    total: 0,
+  },
+  {
+    name: "May",
+    total: 0,
+  },
+  {
+    name: "Jun",
+    total: 0,
+  },
+  {
+    name: "Jul",
+    total: 0,
+  },
+  {
+    name: "Aug",
+    total: 0,
+  },
+  {
+    name: "Sep",
+    total: 0,
+  },
+  {
+    name: "Oct",
+    total: 0,
+  },
+  {
+    name: "Nov",
+    total: 0,
+  },
+  {
+    name: "Dec",
+    total: 0,
+  },
+];
 
 const SellerDashboard = async () => {
   const seller = await getSellerProfile("/seller?auth-seller=login");
+
+  const orders = (await filterDocs(
+    "orders",
+    where("owners", "array-contains", doc(sellerCollectionRef, seller?.id))
+  )) as Order[];
+
+  let products: Product[] = [];
+
+  let totalRevenue = 0;
+  let totalProductsSelled = 0;
+  let totalProductsSelledToday = 0;
+  let users = new Set();
+
+  for (let i = 0; i < orders.length; i++) {
+    const order = orders[i];
+    const user = (await getDoc(order.user)).data() as User;
+
+    for (let j = 0; j < order.products.length; j++) {
+      const prod = order.products[j];
+
+      if (prod.owner?.id === seller?.id) {
+        const product = (await getDoc(prod.id)).data() as Product;
+
+        const discountPrice =
+          product.price - product.price * (product.discount / 100);
+
+        totalRevenue += discountPrice;
+        totalProductsSelled += 1;
+
+        users.add(order.user?.id || order.user);
+
+        const purchasedDateFormatted = new Date(order.purchasedAt.toDate());
+        const todayDateFormatted = new Date();
+
+        if (
+          purchasedDateFormatted.toLocaleDateString() ===
+          todayDateFormatted.toLocaleDateString()
+        ) {
+          totalProductsSelledToday += 1;
+        }
+
+        // Push only this month purchased products
+        if (
+          purchasedDateFormatted.getFullYear() ===
+            todayDateFormatted.getFullYear() &&
+          purchasedDateFormatted.getMonth() === todayDateFormatted.getMonth()
+        ) {
+          products.push({ ...product, price: discountPrice, user: user });
+        }
+
+        if (
+          purchasedDateFormatted.getFullYear() ===
+          todayDateFormatted.getFullYear()
+        ) {
+          monthSalesData[purchasedDateFormatted.getMonth()].total +=
+            discountPrice;
+        }
+      }
+    }
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -34,7 +153,7 @@ const SellerDashboard = async () => {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$45,231.89</div>
+            <div className="text-2xl font-bold">{roundOff(totalRevenue)}</div>
             <p className="text-xs text-muted-foreground">
               +20.1% from last month
             </p>
@@ -60,7 +179,7 @@ const SellerDashboard = async () => {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+2350</div>
+            <div className="text-2xl font-bold">{users.size}</div>
             <p className="text-xs text-muted-foreground">
               +180.1% from last month
             </p>
@@ -109,9 +228,9 @@ const SellerDashboard = async () => {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+573</div>
+            <div className="text-2xl font-bold">{totalProductsSelled}</div>
             <p className="text-xs text-muted-foreground">
-              +201 since last hour
+              +{totalProductsSelledToday} since today
             </p>
           </CardContent>
         </Card>
@@ -122,73 +241,42 @@ const SellerDashboard = async () => {
           <CardHeader>
             <CardTitle>Overview</CardTitle>
           </CardHeader>
+
           <CardContent className="pl-2">
-            <Overview />
+            <Overview data={monthSalesData} />
           </CardContent>
         </Card>
 
         <Card className="col-span-3">
           <CardHeader>
             <CardTitle>Recent Sales</CardTitle>
-            <CardDescription>You made 265 sales this month.</CardDescription>
+            <CardDescription>
+              You made {products.length} sales this month.
+            </CardDescription>
           </CardHeader>
+
           <CardContent>
             <div className="space-y-8">
-              <div className="flex items-center">
-                <div className="space-y-1">
-                  <p className="text-sm font-medium leading-none">
-                    Olivia Martin
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    olivia.martin@email.com
-                  </p>
+              {products.map((e, i) => (
+                <div key={i} className="flex items-center">
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium leading-none">
+                      {e.user.name} |{" "}
+                      <a
+                        href={`mailto:${e.user.email}`}
+                        className="text-blue-600"
+                      >
+                        {e.user.email}
+                      </a>
+                    </p>
+                    <p className="text-sm text-muted-foreground">{e.pname}</p>
+                  </div>
+
+                  <div className="ml-auto font-medium">
+                    +{roundOff(e.price)}
+                  </div>
                 </div>
-                <div className="ml-auto font-medium">+$1,999.00</div>
-              </div>
-              <div className="flex items-center">
-                <div className="space-y-1">
-                  <p className="text-sm font-medium leading-none">
-                    Jackson Lee
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    jackson.lee@email.com
-                  </p>
-                </div>
-                <div className="ml-auto font-medium">+$39.00</div>
-              </div>
-              <div className="flex items-center">
-                <div className="space-y-1">
-                  <p className="text-sm font-medium leading-none">
-                    Isabella Nguyen
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    isabella.nguyen@email.com
-                  </p>
-                </div>
-                <div className="ml-auto font-medium">+$299.00</div>
-              </div>
-              <div className="flex items-center">
-                <div className="space-y-1">
-                  <p className="text-sm font-medium leading-none">
-                    William Kim
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    will@email.com
-                  </p>
-                </div>
-                <div className="ml-auto font-medium">+$99.00</div>
-              </div>
-              <div className="flex items-center">
-                <div className="space-y-1">
-                  <p className="text-sm font-medium leading-none">
-                    Sofia Davis
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    sofia.davis@email.com
-                  </p>
-                </div>
-                <div className="ml-auto font-medium">+$39.00</div>
-              </div>
+              ))}
             </div>
           </CardContent>
         </Card>

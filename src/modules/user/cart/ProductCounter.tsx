@@ -28,8 +28,6 @@ const ProductCounter = ({ qty = 1, id = "" }) => {
     for (let i = 0; i < myCart.length; i++) {
       const item = myCart[i];
 
-      console.log({ item });
-
       if (item.id === id) {
         const productRef = doc(productCollectionRef, id);
         cartProducts.push({ id: productRef, qty: cnt });

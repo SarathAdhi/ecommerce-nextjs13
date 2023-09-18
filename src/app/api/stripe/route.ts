@@ -60,6 +60,7 @@ export async function POST(req: NextRequest) {
               description: item.description,
               metadata: {
                 ...rest,
+                owner: owner.id,
               },
             },
             unit_amount: discountPrice * 100,

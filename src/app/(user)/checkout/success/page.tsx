@@ -1,4 +1,8 @@
-import { productCollectionRef, userCollectionRef } from "@backend/db";
+import {
+  productCollectionRef,
+  sellerCollectionRef,
+  userCollectionRef,
+} from "@backend/db";
 import { addDoc, filterDocs, updateDoc } from "@backend/lib";
 import InvalidSession from "@components/InvalidSession";
 import { getUserProfile } from "@utils/get-profile";
@@ -6,6 +10,7 @@ import { doc, where } from "firebase/firestore";
 import Image from "next/image";
 import React from "react";
 import Stripe from "stripe";
+import { Order } from "types/order";
 
 const stripe = new Stripe(process.env.NEXT_STRIPE_SECRET_KEY!, {
   apiVersion: "2023-08-16",
@@ -65,13 +70,17 @@ const CheckoutPage: React.FC<Props> = async ({ searchParams }) => {
 
     const productsBought = items.map(({ metadata }) => ({
       id: doc(productCollectionRef, metadata.id),
-      qty: metadata.qty,
+      owner: doc(sellerCollectionRef, metadata?.owner),
+      qty: parseInt(metadata.qty),
     }));
+
+    const owners = productsBought.map((e) => e.owner);
 
     await addDoc("orders", {
       session_id: searchParams.session_id,
       user: doc(userCollectionRef, user?.id),
       products: productsBought,
+      owners,
       purchasedAt: new Date(),
     });
 
