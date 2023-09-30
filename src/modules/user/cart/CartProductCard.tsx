@@ -12,7 +12,7 @@ const CartProductCard: React.FC<
 > = ({ id, pname, price, uuid, images, discount, cartId, owner, qty }) => {
   return (
     <div className="flex flex-col gap-4 p-4 bg-white rounded-md shadow-lg">
-      <div className="flex items-start gap-8">
+      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-8">
         <Image
           src={images[0].url}
           width={1000}
@@ -33,18 +33,18 @@ const CartProductCard: React.FC<
           </div>
 
           <div>
-            <p className="!text-base font-semibold text-green-700">
+            <p className="text-sm sm:text-base font-semibold text-green-700">
               Extra {roundOff(price * (discount / 100))} off
             </p>
 
             <p>
-              <span className="text-2xl font-semibold">
+              <span className="text-xl sm:text-2xl font-semibold">
                 {roundOff(price - price * (discount / 100))}
               </span>
 
-              <span className="ml-2 !text-base">
+              <span className="ml-2 text-sm sm:text-base">
                 <span className="text-gray-400 font-normal line-through mr-2">
-                  ₹{roundOff(price)}
+                  {roundOff(price)}
                 </span>
 
                 <span className="text-green-700">{discount}% off</span>

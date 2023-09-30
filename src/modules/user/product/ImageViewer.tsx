@@ -26,10 +26,11 @@ const ImageViewer: React.FC<Props> = ({ images, productId, isAddedToCart }) => {
   const { user } = useAppStore();
 
   const [activeImage, setActiveImage] = useState("");
-  const [isAddToCartLoading, setIsAddToCartLoading] = useState(false);
+  const [isCartBtnLoading, setIsCartBtnLoading] = useState(false);
+  const [isBuyBtnLoading, setIsBuyBtnLoading] = useState(false);
 
   async function addToCart() {
-    setIsAddToCartLoading(true);
+    setIsCartBtnLoading(true);
 
     const productRef = doc(productCollectionRef, productId);
 
@@ -40,10 +41,12 @@ const ImageViewer: React.FC<Props> = ({ images, productId, isAddedToCart }) => {
     refresh();
 
     toast.success("Added to cart");
-    setIsAddToCartLoading(false);
+    setIsCartBtnLoading(false);
   }
 
   async function handleBuyProduct() {
+    setIsBuyBtnLoading(true);
+
     const productRef = doc(productCollectionRef, productId);
 
     await updateDoc("cart", user?.cartId!, {
@@ -51,12 +54,14 @@ const ImageViewer: React.FC<Props> = ({ images, productId, isAddedToCart }) => {
     });
 
     refresh();
-    push("/cart");
+
+    push("/cart?forceCheckout=true");
+    setIsBuyBtnLoading(false);
   }
 
   return (
-    <div className="md:col-span-4 lg:col-span-3 md:sticky md:top-[74px] self-start flex flex-col gap-4">
-      <div className="flex flex-col gap-4">
+    <div className="w-full md:col-span-4 lg:col-span-3 md:sticky md:top-[74px] self-start flex flex-col gap-4">
+      <div className="grid gap-4">
         <div className="flex overflow-x-auto">
           {images.map((img) => (
             <div
@@ -94,7 +99,7 @@ const ImageViewer: React.FC<Props> = ({ images, productId, isAddedToCart }) => {
             className="uppercase mr"
             disabled={isAddedToCart}
           >
-            {isAddToCartLoading ? (
+            {isCartBtnLoading ? (
               <Loader2 className="animate-spin" />
             ) : (
               <>
@@ -108,9 +113,15 @@ const ImageViewer: React.FC<Props> = ({ images, productId, isAddedToCart }) => {
           </Button>
 
           <Button onClick={handleBuyProduct} className="uppercase mr">
-            <AiTwotoneThunderbolt className="flex-shrink-0" size={16} />
+            {isBuyBtnLoading ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <>
+                <AiTwotoneThunderbolt className="flex-shrink-0" size={16} />
 
-            <span>Buy now</span>
+                <span>Buy now</span>
+              </>
+            )}
           </Button>
         </div>
       </div>

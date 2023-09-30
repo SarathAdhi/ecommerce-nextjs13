@@ -62,8 +62,8 @@ const MyCart = async () => {
   if (isCartEmpty) return <h4 className="text-center">Your cart is empty.</h4>;
 
   return (
-    <div className="grid grid-cols-6 gap-4 items-start">
-      <div className="col-span-4 grid gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-6 gap-4 items-start">
+      <div className="order-1 md:order-none md:col-span-4 grid gap-4">
         {cart.map((product) => (
           <CartProductCard
             key={product.id}
@@ -73,7 +73,7 @@ const MyCart = async () => {
         ))}
       </div>
 
-      <div className="p-4 sticky top-16 grid gap-4 col-span-2 shadow-lg border border-border rounded-md">
+      <div className="p-4 sticky top-16 grid gap-4 md:col-span-2 shadow-lg border border-border rounded-md">
         <div className="grid gap-2">
           <h5 className="text-gray-600">PRICE DETAILS</h5>
 
@@ -95,7 +95,7 @@ const MyCart = async () => {
 
           <hr className="w-full h-1" />
 
-          <h5 className="w-full flex justify-between">
+          <h5 className="w-full flex justify-between gap-4">
             <span>Total Amount</span>
             <span>{roundOff(totalPriceAfterDiscount)}</span>
           </h5>

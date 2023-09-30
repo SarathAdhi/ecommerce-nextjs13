@@ -54,12 +54,12 @@ const SellerNavbarActions = ({ isSeller = false }) => {
 
         {isSeller && (
           <div className="grid gap-2">
-            <Button asChild className="!rounded-full">
+            {/* <Button asChild className="!rounded-full">
               <Link href="/seller/my-account" className="space-x-2">
                 <FaUser />
                 <span>Account</span>
               </Link>
-            </Button>
+            </Button> */}
 
             <SellerLogoutButton />
           </div>

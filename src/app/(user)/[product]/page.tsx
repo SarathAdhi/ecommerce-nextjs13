@@ -22,7 +22,7 @@ type Props = {
   };
 };
 
-const ViewProduct: React.FC<Props> = async ({ params, searchParams }) => {
+const ViewProduct: React.FC<Props> = async ({ searchParams }) => {
   const productId = searchParams.pid;
 
   if (!productId)

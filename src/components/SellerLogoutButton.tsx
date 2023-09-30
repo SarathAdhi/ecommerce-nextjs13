@@ -14,7 +14,7 @@ const SellerLogoutButton = () => {
   return (
     <Button
       variant="destructive"
-      className="w-full rounded-lg py-1 flex items-center gap-2"
+      className="w-full rounded-full py-1 flex items-center gap-2"
       onClick={() => {
         setCookie("token-seller", "");
         setSeller(null);

@@ -1,16 +1,19 @@
 "use client";
 
-import { addDoc, filterDoc, updateDoc } from "@backend/lib";
 import { Button } from "@components/ui/button";
 import getStripe from "@lib/stripe";
 import { useAppStore } from "@utils/store";
-import React from "react";
-import { Cart } from "types/cart";
+import { useSearchParams } from "next/navigation";
+import React, { useEffect } from "react";
 import { Product } from "types/product";
 
 type MyCartItem = Product<Seller> & { qty: number };
 
 const PlaceOrderButton: React.FC<{ cart: MyCartItem[] }> = ({ cart }) => {
+  const isForceCheckout = useSearchParams().get("forceCheckout") === "true";
+
+  console.log({ isForceCheckout });
+
   const { user } = useAppStore();
 
   const handlePlaceOrder = async () => {
@@ -32,26 +35,14 @@ const PlaceOrderButton: React.FC<{ cart: MyCartItem[] }> = ({ cart }) => {
 
     try {
       stripe?.redirectToCheckout({ sessionId: data.session.id });
-
-      // if (data?.isCartItems) {
-      //   console.log("HELLO CART CLEAR");
-
-      //   const userCart = (await filterDoc("cart", user?.cartId)) as Cart;
-
-      //   await addDoc("orders", {
-      //     user: user?.id,
-      //     products: userCart.myCart,
-      //     purchasedAt: new Date(),
-      //   });
-
-      //   await updateDoc("cart", user?.cartId, {
-      //     myCart: [],
-      //   });
-      // }
     } catch (error) {
       console.log("client -> ", error);
     }
   };
+
+  useEffect(() => {
+    if (isForceCheckout) handlePlaceOrder();
+  }, [isForceCheckout]);
 
   return <Button onClick={handlePlaceOrder}>Place Order</Button>;
 };
