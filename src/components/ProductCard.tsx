@@ -43,7 +43,7 @@ const ProductCard: React.FC<
             width={1000}
             height={1000}
             src={images[0].url}
-            className="w-full h-60 rounded-md object-cover"
+            className="w-full h-56 rounded-md object-cover"
             alt="Product image"
           />
         ) : (
@@ -72,19 +72,19 @@ const ProductCard: React.FC<
               <h5 className={cn("line-clamp-2 leading-tight")}>{pname}</h5>
             </Link>
           ) : (
-            <h5 className={cn("line-clamp-2 leading-tight")}>{pname}</h5>
+            <h6 className={cn("line-clamp-2 leading-tight")}>{pname}</h6>
           )}
 
           <div className="grid place-items-start">
-            <p className="!text-base font-semibold text-green-700">
+            <p className="!text-sm font-semibold text-green-700">
               Extra {roundOff(price * (discount / 100))} off
             </p>
 
-            <p className="text-2xl font-semibold">
+            <p className="text-xl font-semibold">
               {roundOff(price - price * (discount / 100))}
             </p>
 
-            <p className="!text-base">
+            <p className="!text-sm">
               <span className="text-gray-400 font-normal line-through mr-2">
                 ₹{price}
               </span>

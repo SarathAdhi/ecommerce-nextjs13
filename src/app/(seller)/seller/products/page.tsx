@@ -8,7 +8,7 @@ import React from "react";
 import { Product } from "types/product";
 
 const SellerProductsPage = async () => {
-  const seller = await getSellerProfile("/seller?auth-seller=login");
+  const seller = await getSellerProfile("/seller/auth/login");
 
   const _products: Product[] = await filterDocs(
     "products",

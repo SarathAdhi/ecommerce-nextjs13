@@ -21,7 +21,7 @@ type Props = {
 };
 
 const ImageViewer: React.FC<Props> = ({ images, productId, isAddedToCart }) => {
-  const { refresh } = useRouter();
+  const { refresh, push } = useRouter();
 
   const { user } = useAppStore();
 
@@ -41,6 +41,17 @@ const ImageViewer: React.FC<Props> = ({ images, productId, isAddedToCart }) => {
 
     toast.success("Added to cart");
     setIsAddToCartLoading(false);
+  }
+
+  async function handleBuyProduct() {
+    const productRef = doc(productCollectionRef, productId);
+
+    await updateDoc("cart", user?.cartId!, {
+      myCart: arrayUnion({ id: productRef, qty: 1 }),
+    });
+
+    refresh();
+    push("/cart");
   }
 
   return (
@@ -96,7 +107,7 @@ const ImageViewer: React.FC<Props> = ({ images, productId, isAddedToCart }) => {
             )}
           </Button>
 
-          <Button className="uppercase mr">
+          <Button onClick={handleBuyProduct} className="uppercase mr">
             <AiTwotoneThunderbolt className="flex-shrink-0" size={16} />
 
             <span>Buy now</span>

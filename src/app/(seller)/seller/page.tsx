@@ -25,7 +25,7 @@ const SellerPage = async () => {
             </h1>
 
             <Button asChild className="mt-4 text-xl">
-              <Link href="/seller?auth-seller=register" className="ml">
+              <Link href="/seller/auth/register" className="ml">
                 Start Selling
                 <AiOutlineArrowRight />
               </Link>

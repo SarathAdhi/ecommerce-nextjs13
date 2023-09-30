@@ -5,6 +5,7 @@ import { roundOff } from "@utils/round-off";
 import Image from "next/image";
 import RemoveProductButton from "./RemoveProductButton";
 import ProductCounter from "./ProductCounter";
+import { productLink } from "@utils/product-link";
 
 const CartProductCard: React.FC<
   Product<Seller> & { cartId: string; qty: number }
@@ -24,7 +25,7 @@ const CartProductCard: React.FC<
 
         <div className="grid gap-2">
           <div>
-            <Link href={`/${uuid}`} className="hover:underline">
+            <Link href={productLink(pname, uuid)} className="hover:underline">
               <h4>{pname}</h4>
             </Link>
 

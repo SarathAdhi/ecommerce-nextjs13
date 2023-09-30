@@ -4,7 +4,7 @@ import ProductCard from "@components/ProductCard";
 import BetaVersionDialog from "@modules/user/home/BetaVersionDialog";
 import { categories } from "@utils/constants";
 import { fetchProductsImages } from "@utils/fetch-product";
-import { where } from "firebase/firestore";
+import { limit, where } from "firebase/firestore";
 import { ResponsiveType } from "react-multi-carousel";
 import { Product } from "types/product";
 
@@ -30,19 +30,22 @@ const responsive: ResponsiveType = {
 const Home = async () => {
   let mobileProducts: Product[] = await filterDocs(
     "products",
-    where("category", "==", categories[0].value)
+    where("category", "==", categories[0].value),
+    limit(6)
   );
   mobileProducts = await fetchProductsImages(mobileProducts);
 
   let electronicsProducts: Product[] = await filterDocs(
     "products",
-    where("category", "==", categories[1].value)
+    where("category", "==", categories[1].value),
+    limit(6)
   );
   electronicsProducts = await fetchProductsImages(electronicsProducts);
 
   let fashionProducts: Product[] = await filterDocs(
     "products",
-    where("category", "==", categories[2].value)
+    where("category", "==", categories[2].value),
+    limit(6)
   );
   fashionProducts = await fetchProductsImages(fashionProducts);
 
@@ -50,7 +53,7 @@ const Home = async () => {
     <div>
       {electronicsProducts.length !== 0 && (
         <div className="grid gap-2">
-          <h3>Best of Electronics</h3>
+          <h4>Best of Electronics</h4>
 
           <Carousel responsive={responsive}>
             {electronicsProducts.map((product) => (
@@ -62,7 +65,7 @@ const Home = async () => {
 
       {fashionProducts.length !== 0 && (
         <div className="grid gap-2">
-          <h3>Best of Fashion</h3>
+          <h4>Best of Fashion</h4>
 
           <Carousel responsive={responsive}>
             {fashionProducts.map((product) => (
@@ -74,7 +77,7 @@ const Home = async () => {
 
       {mobileProducts.length !== 0 && (
         <div className="grid gap-2">
-          <h3>Best of Mobiles & Tablets</h3>
+          <h4>Best of Mobiles & Tablets</h4>
 
           <Carousel responsive={responsive}>
             {mobileProducts.map((product) => (

@@ -71,7 +71,7 @@ let monthSalesData = [
 ];
 
 const SellerDashboard = async () => {
-  const seller = await getSellerProfile("/seller?auth-seller=login");
+  const seller = await getSellerProfile("/seller/auth/login");
 
   const orders = (await filterDocs(
     "orders",

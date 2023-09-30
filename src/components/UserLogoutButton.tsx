@@ -7,14 +7,14 @@ import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-const LogoutButton = () => {
+const UserLogoutButton = () => {
   const { refresh } = useRouter();
   const { setUser } = useAppStore();
 
   return (
     <Button
       variant="destructive"
-      className="rounded-full"
+      className="w-full rounded-lg py-1 flex items-center gap-2"
       onClick={() => {
         setCookie("token-user", "");
         setUser(null);
@@ -22,8 +22,10 @@ const LogoutButton = () => {
       }}
     >
       <LogOut />
+
+      <span>Logout</span>
     </Button>
   );
 };
 
-export default LogoutButton;
+export default UserLogoutButton;

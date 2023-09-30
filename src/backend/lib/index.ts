@@ -100,11 +100,11 @@ export const filterDoc = async (
 
 export const filterDocs = async (
   collection: FilterDocsProps["collection"] = "users",
-  where: FilterDocsProps["where"]
+  ...queryConstraints: QueryConstraint[]
 ) => {
   const getCollection = collections[collection];
 
-  const res = query(getCollection, where);
+  const res = query(getCollection, ...queryConstraints);
   const querySnapshot = await getDocs(res);
 
   const data = [] as any;

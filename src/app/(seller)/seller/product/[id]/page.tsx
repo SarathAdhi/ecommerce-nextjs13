@@ -14,7 +14,7 @@ type Props = {
 };
 
 const EditProduct: React.FC<Props> = async ({ params }) => {
-  const seller = await getSellerProfile("/seller?auth-seller=login");
+  const seller = await getSellerProfile("/seller/auth/login");
 
   const products = await filterDocs("products", where("uuid", "==", params.id));
 
@@ -23,7 +23,7 @@ const EditProduct: React.FC<Props> = async ({ params }) => {
   if (!_product)
     return <h2 className="text-center text-xl font-bold">Product Not Found</h2>;
 
-  let product = (await fetchProductDetails(_product));
+  let product = await fetchProductDetails(_product);
 
   if (product.owner.uuid !== seller?.uuid) redirect("/seller");
 

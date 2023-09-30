@@ -26,11 +26,8 @@ const initialValuesRegister = {
   password: "",
   confirm_password: "",
 };
-type Props = {
-  onClose: () => void;
-};
 
-const SellerRegisterForm: React.FC<Props> = ({ onClose }) => {
+const SellerRegisterForm = () => {
   const { refresh } = useRouter();
 
   const formik = useFormik({
@@ -63,7 +60,6 @@ const SellerRegisterForm: React.FC<Props> = ({ onClose }) => {
 
         await getSellerProfile("", _uuid);
 
-        onClose();
         refresh();
       } catch (error) {
         console.log({ error });
@@ -74,9 +70,9 @@ const SellerRegisterForm: React.FC<Props> = ({ onClose }) => {
   return (
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
       <Input
-        label="Name"
+        label="Company Name"
         name="companyName"
-        placeholder="Enter your Name"
+        placeholder="Enter your Company Name"
         value={formik.values.companyName}
         onChange={formik.handleChange}
         required

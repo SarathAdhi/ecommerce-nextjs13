@@ -22,11 +22,7 @@ const initialValuesLogin = {
   password: "",
 };
 
-type Props = {
-  onClose: () => void;
-};
-
-const SellerLoginForm: React.FC<Props> = ({ onClose }) => {
+const SellerLoginForm = () => {
   const { refresh } = useRouter();
 
   const formik = useFormik({
@@ -49,7 +45,6 @@ const SellerLoginForm: React.FC<Props> = ({ onClose }) => {
 
       await getSellerProfile("", seller[0].uuid);
 
-      onClose();
       refresh();
     },
   });

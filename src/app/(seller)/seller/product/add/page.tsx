@@ -3,7 +3,7 @@ import AddProductForm from "@modules/seller/product/AddProductForm";
 import { getSellerProfile } from "@utils/get-profile";
 
 const AddProduct = async () => {
-  await getSellerProfile("/seller?auth-seller=login");
+  await getSellerProfile("/seller/auth/login");
 
   return (
     <div>
