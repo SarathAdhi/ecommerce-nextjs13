@@ -31,7 +31,7 @@ export const Carousel: React.FC<Props> = ({
       containerClass="!space-x-4"
       responsive={_responsive}
       ssr
-      itemClass="p-4"
+      itemClass="p-2 sm:p-4"
       {...rest}
     >
       {children}

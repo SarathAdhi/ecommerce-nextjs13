@@ -5,7 +5,7 @@ import { UserNavbar } from "@components/Navbar";
 import { getSellerProfile, getUserProfile } from "@utils/get-profile";
 import { Toaster } from "react-hot-toast";
 import ZustandWrapper from "@components/ZustandWrapper";
-import { DocumentData, DocumentReference, getDoc } from "firebase/firestore";
+import { DocumentData, DocumentReference } from "firebase/firestore";
 import { Cart, MyCart } from "types/cart";
 import { filterDoc } from "@backend/lib";
 
@@ -48,7 +48,7 @@ export default async function RootLayout({
           <main
             className={cn(
               inter.className,
-              "container !p-4 flex flex-col h-full flex-1"
+              "container p-2 sm:p-4 flex flex-col h-full flex-1"
             )}
           >
             {children}
