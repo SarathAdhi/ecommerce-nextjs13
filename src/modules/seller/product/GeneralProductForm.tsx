@@ -15,6 +15,8 @@ import { puuid } from "@utils/uuid";
 import { categories } from "@utils/constants";
 import { useAppStore } from "@utils/store";
 import { Select } from "@components/ui/select";
+import { productLink } from "@utils/product-link";
+import { useRouter } from "next/navigation";
 
 const schema = y.object().shape({
   uuid: y.string().required("Product ID is required"),
@@ -42,7 +44,10 @@ export const generalFormInitialValues = {
 };
 
 type Props = {
-  product?: Product<Seller>;
+  product?: Omit<
+    Product<Seller>,
+    "owner" | "imagePath" | "reviews" | "reviewId"
+  >;
   isUpdate?: boolean;
   category: string;
 };
@@ -53,9 +58,10 @@ const GeneralProductForm: React.FC<Props> = ({
   category,
 }) => {
   const { seller } = useAppStore();
+  const { push } = useRouter();
 
   const formik = useFormik({
-    initialValues: { ...generalFormInitialValues, category },
+    initialValues: { ...generalFormInitialValues, category, ...product },
     validationSchema: schema,
     onSubmit: async (values) => {
       const { images, ...rest } = values;
@@ -89,6 +95,8 @@ const GeneralProductForm: React.FC<Props> = ({
         });
 
         toast.success("Product Added");
+
+        push(productLink(values.pname, values.uuid));
       } catch (error) {
         toast.error("Something went wrong");
       }
@@ -175,14 +183,18 @@ const GeneralProductForm: React.FC<Props> = ({
       <InputFile
         label="Product Images"
         name="images"
-        path={`products/${generalFormInitialValues.uuid}/`}
+        path={`products/${formik.values.uuid}/`}
         setFieldValue={formik.setFieldValue}
-        value={formik.values["images"]}
+        value={formik.values["images"]?.map((e) => e?.url)}
+        initialImages={formik.values["images"]?.map((e) => ({
+          source: e?.url,
+          options: { type: "local" },
+        }))}
         // callback={getProduct}
         allowMultiple
       />
 
-      <Button>Add Product</Button>
+      <Button>{isUpdate ? "Update" : "Add"} Product</Button>
     </form>
   );
 };

@@ -15,6 +15,8 @@ import { puuid } from "@utils/uuid";
 import { categories, sizes } from "@utils/constants";
 import { useAppStore } from "@utils/store";
 import { Select } from "@components/ui/select";
+import { useRouter } from "next/navigation";
+import { productLink } from "@utils/product-link";
 
 const schema = y.object().shape({
   uuid: y.string().required("Product ID is required"),
@@ -52,9 +54,12 @@ type Props = {
 
 const FashionProductForm: React.FC<Props> = ({ product, isUpdate }) => {
   const { seller } = useAppStore();
+  const { push } = useRouter();
+
+  const _initialValues = product || initialValues;
 
   const formik = useFormik({
-    initialValues: initialValues,
+    initialValues: _initialValues,
     validationSchema: schema,
     onSubmit: async (values) => {
       const { images, ...rest } = values;
@@ -74,6 +79,8 @@ const FashionProductForm: React.FC<Props> = ({ product, isUpdate }) => {
         });
 
         toast.success("Product Added");
+
+        push(productLink(values.pname, values.uuid));
       } catch (error) {
         toast.error("Something went wrong");
       }
@@ -117,7 +124,7 @@ const FashionProductForm: React.FC<Props> = ({ product, isUpdate }) => {
           error={formik.errors.pname}
         />
 
-        <Select
+        {/* <Select
           label="Product Size"
           name="size"
           placeholder="Select a size"
@@ -134,7 +141,7 @@ const FashionProductForm: React.FC<Props> = ({ product, isUpdate }) => {
           value={formik.values.color}
           onChange={formik.handleChange}
           error={formik.errors.color}
-        />
+        /> */}
 
         <Input
           label="Product Quantity"

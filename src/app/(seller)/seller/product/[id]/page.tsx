@@ -27,11 +27,13 @@ const EditProduct: React.FC<Props> = async ({ params }) => {
 
   if (product.owner.uuid !== seller?.uuid) redirect("/seller");
 
-  const { id, owner, imagePath, images, reviews, reviewId, ...rest } = product;
+  const { owner, imagePath, reviews, reviewId, ...rest } = product;
+
+  console.log(product);
 
   return (
     <div>
-      <AddProductForm {...{ product, _category: rest.category }} />
+      <AddProductForm {...{ product: rest, _category: rest.category }} />
     </div>
   );
 };

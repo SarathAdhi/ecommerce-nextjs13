@@ -51,12 +51,12 @@ const Home = async () => {
 
   return (
     <div>
-      {electronicsProducts.length !== 0 && (
+      {mobileProducts.length !== 0 && (
         <div className="grid gap-2">
-          <h4>Best of Electronics</h4>
+          <h4>Best of Mobiles & Tablets</h4>
 
           <Carousel responsive={responsive}>
-            {electronicsProducts.map((product) => (
+            {mobileProducts.map((product) => (
               <ProductCard key={product.id} isDisplay {...product} />
             ))}
           </Carousel>
@@ -75,12 +75,12 @@ const Home = async () => {
         </div>
       )}
 
-      {mobileProducts.length !== 0 && (
+      {electronicsProducts.length !== 0 && (
         <div className="grid gap-2">
-          <h4>Best of Mobiles & Tablets</h4>
+          <h4>Best of Electronics</h4>
 
           <Carousel responsive={responsive}>
-            {mobileProducts.map((product) => (
+            {electronicsProducts.map((product) => (
               <ProductCard key={product.id} isDisplay {...product} />
             ))}
           </Carousel>

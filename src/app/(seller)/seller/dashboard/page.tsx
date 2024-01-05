@@ -73,6 +73,8 @@ let monthSalesData = [
 const SellerDashboard = async () => {
   const seller = await getSellerProfile("/seller/auth/login");
 
+  console.log(seller);
+
   const orders = (await filterDocs(
     "orders",
     where("owners", "array-contains", doc(sellerCollectionRef, seller?.id))
@@ -133,6 +135,8 @@ const SellerDashboard = async () => {
     }
   }
 
+  console.log(totalRevenue);
+
   return (
     <div className="flex flex-col gap-4">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -152,6 +156,7 @@ const SellerDashboard = async () => {
               <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
             </svg>
           </CardHeader>
+
           <CardContent>
             <div className="text-2xl font-bold">{roundOff(totalRevenue)}</div>
             <p className="text-xs text-muted-foreground">
@@ -204,7 +209,7 @@ const SellerDashboard = async () => {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+12,234</div>
+            <div className="text-2xl font-bold">+{orders.length}</div>
             <p className="text-xs text-muted-foreground">
               +19% from last month
             </p>

@@ -4,12 +4,13 @@ import React, { useState } from "react";
 import GeneralProductForm from "./GeneralProductForm";
 import { categories } from "@utils/constants";
 import { Select } from "@components/ui/select";
-import FashionProductForm from "./FashionProductForm";
 import { Product } from "types/product";
 
 type Props = {
   _category?: string;
-  product?: Product<Seller> | undefined;
+  product?:
+    | Omit<Product<Seller>, "owner" | "imagePath" | "reviews" | "reviewId">
+    | undefined;
 };
 
 const AddProductForm: React.FC<Props> = ({
@@ -32,11 +33,11 @@ const AddProductForm: React.FC<Props> = ({
         </div>
       ) : (
         <>
-          {category !== "fashion" && (
-            <GeneralProductForm {...{ category, product }} />
-          )}
+          {/* {category !== "fashion" && ( */}
+          <GeneralProductForm {...{ category, product }} />
+          {/* )} */}
 
-          {category === "fashion" && <FashionProductForm {...{ product }} />}
+          {/* {category === "fashion" && <FashionProductForm {...{ product }} />} */}
         </>
       )}
     </>

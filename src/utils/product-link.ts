@@ -5,5 +5,5 @@ export const productLink = (_name: string, uuid: string) => {
     .replaceAll("  ", " ")
     .split(" ")
     .join("-");
-  return `${name}?pid=${uuid}`;
+  return `/${name}?pid=${uuid}`;
 };

@@ -13,7 +13,7 @@ const CardWrapper: React.FC<
 > = ({ isDisplay, pname, uuid, children }) =>
   isDisplay ? (
     <Link
-      href={`/${productLink(pname, uuid)}`}
+      href={productLink(pname, uuid)}
       className="flex flex-col gap-4 p-4 bg-white rounded-md shadow-lg"
     >
       {children}
@@ -65,10 +65,7 @@ const ProductCard: React.FC<
 
         <div className="mt-2 grid gap-2">
           {!isDisplay ? (
-            <Link
-              href={`/${productLink(pname, uuid)}`}
-              className="hover:underline"
-            >
+            <Link href={productLink(pname, uuid)} className="hover:underline">
               <h5 className={cn("line-clamp-2 leading-tight")}>{pname}</h5>
             </Link>
           ) : (

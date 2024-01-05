@@ -8,6 +8,7 @@ import "filepond/dist/filepond.min.css";
 import { delFile, fileUpload, getFile } from "@backend/lib";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import { unescape } from "querystring";
 
 export const IMAGE_TYPES = ["image/*"];
 
@@ -45,7 +46,7 @@ const InputFile: React.FC<Props> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [files, setFiles] = useState<(string | FilePondInitialFile | Blob)[]>(
-    []
+    initialImages || []
   );
 
   return (
@@ -65,6 +66,14 @@ const InputFile: React.FC<Props> = ({
         onupdatefiles={setFiles}
         acceptedFileTypes={fileType}
         server={{
+          load: (source, load, error, progress, abort, headers) => {
+            var myRequest = new Request(source);
+            fetch(myRequest).then(function (response) {
+              response.blob().then(function (myBlob) {
+                load(myBlob);
+              });
+            });
+          },
           process: async (fieldName, file, metadata, load) => {
             setIsLoading(true);
 
@@ -99,9 +108,16 @@ const InputFile: React.FC<Props> = ({
         disabled={isLoading}
         {...rest}
         onremovefile={async (e, file) => {
-          const filePath = `${path}/${file.filename}`;
+          const filePath = decodeURIComponent(file.filename).includes(
+            "products/"
+          )
+            ? decodeURIComponent(file.filename)
+            : `${path}/${file.filename}`;
+
+          console.log(filePath, decodeURIComponent(file.filename));
           try {
             const fileUrl = await getFile(filePath);
+            console.log({ fileUrl });
 
             let fileUrls = value as string[];
             fileUrls = fileUrls.filter((e) => e !== fileUrl);
@@ -110,7 +126,9 @@ const InputFile: React.FC<Props> = ({
 
             delFile(filePath);
             callback?.();
-          } catch (error) {}
+          } catch (error) {
+            console.log({ error });
+          }
         }}
       />
     </div>

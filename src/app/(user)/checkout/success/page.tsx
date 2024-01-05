@@ -5,9 +5,11 @@ import {
 } from "@backend/db";
 import { addDoc, filterDocs, updateDoc } from "@backend/lib";
 import InvalidSession from "@components/InvalidSession";
+import { Button } from "@components/ui/button";
 import { getUserProfile } from "@utils/get-profile";
 import { doc, where } from "firebase/firestore";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import Stripe from "stripe";
 import { Order } from "types/order";
@@ -99,52 +101,60 @@ const CheckoutPage: React.FC<Props> = async ({ searchParams }) => {
   }
 
   return (
-    <div className="p-4 border-2 border-green-300 rounded-lg space-y-4">
-      <h4 className="text-green-600">
-        Thank you, your order has been placed successfully.
-      </h4>
+    <div className="grid gap-4 place-items-center">
+      <div className="w-full p-4 border-2 border-green-300 rounded-lg space-y-4">
+        <h4 className="text-green-600">
+          Thank you, your order has been placed successfully.
+        </h4>
 
-      <div className="space-y-2">
-        <h6 className="underline">Order Summary</h6>
+        <div className="space-y-2">
+          <h6 className="underline">Order Summary</h6>
 
-        {items.map((e) => (
-          <div key={e.id} className="flex items-center gap-2">
-            <Image
-              className="w-20 h-20"
-              width={500}
-              height={500}
-              src={e.images[0]}
-              alt={e.name}
-            />
+          {items.map((e) => (
+            <div key={e.id} className="flex items-center gap-2">
+              <Image
+                className="w-20 h-20"
+                width={500}
+                height={500}
+                src={e.images[0]}
+                alt={e.name}
+              />
 
-            <div>
-              <h6>{e.name}</h6>
+              <div>
+                <h6>{e.name}</h6>
 
-              <div className="divide-x-2 divide-black space-x-2">
-                <span className="font-medium">Quantity: {e.metadata.qty}</span>
+                <div className="divide-x-2 divide-black space-x-2">
+                  <span className="font-medium">
+                    Quantity: {e.metadata.qty}
+                  </span>
 
-                <span className="pl-2 font-medium">
-                  Price:{" "}
-                  {parseInt(e.metadata.price).toLocaleString("en-IN", {
-                    maximumFractionDigits: 0,
-                    style: "currency",
-                    currency: "INR",
-                  })}
-                </span>
+                  <span className="pl-2 font-medium">
+                    Price:{" "}
+                    {parseInt(e.metadata.price).toLocaleString("en-IN", {
+                      maximumFractionDigits: 0,
+                      style: "currency",
+                      currency: "INR",
+                    })}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
+        <h6 className="text">
+          Total Amount:{" "}
+          {totalAmt.toLocaleString("en-IN", {
+            maximumFractionDigits: 0,
+            style: "currency",
+            currency: "INR",
+          })}
+        </h6>
       </div>
 
-      <h6 className="text">
-        Total Amount:{" "}
-        {totalAmt.toLocaleString("en-IN", {
-          maximumFractionDigits: 0,
-          style: "currency",
-          currency: "INR",
-        })}
-      </h6>
+      <Button asChild>
+        <Link href="/">Continue Shopping</Link>
+      </Button>
     </div>
   );
 };
